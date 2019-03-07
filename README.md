@@ -35,3 +35,8 @@ cd ~/catkin_ws/
 catkin_make
 source devel/setup.bash
 ```
+
+## Developers
+
+1. Qt Creator
+2. PySide2 `pip install PySide2`
