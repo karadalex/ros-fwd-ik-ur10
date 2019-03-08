@@ -1,0 +1,39 @@
+version: '2'
+services:
+  master:
+    image: ros:melodic
+    container_name: master
+    ports:
+      - "11311:11311"
+    volumes:
+      - roslogs:/root/.ros/log/
+    command:
+      - roscore
+
+  fwd_kinematics:
+    build: ./kinematics_py
+    container_name: fwd_kinematics
+    depends_on:
+      - master
+    environment:
+      - "ROS_HOSTNAME=fwd_kinematics"
+      - "ROS_MASTER_URI=http://master:11311"
+    volumes:
+      - roslogs:/root/.ros/log/
+    command: /bin/bash -c "source /ros_ws/devel/setup.bash && rosrun kinematics_py fwd_kinematics.py"
+
+  inv_kinematics:
+    build: ./kinematics_py
+    container_name: inv_kinematics
+    depends_on:
+      - master
+    environment:
+      - "ROS_HOSTNAME=inv_kinematics"
+      - "ROS_MASTER_URI=http://master:11311"
+    volumes:
+      - roslogs:/root/.ros/log/
+    command: /bin/bash -c "source /ros_ws/devel/setup.bash && rosrun kinematics_py inv_kinematics.py"
+
+
+volumes:
+  roslogs:
