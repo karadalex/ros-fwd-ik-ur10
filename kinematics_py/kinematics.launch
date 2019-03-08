@@ -1,0 +1,5 @@
+<?xml version="1.0"?>
+<launch>
+    <node name="fwd_kinematics" pkg="kinematics_py" type="fwd_kinematics.py" />
+    <node name="inv_kinematics" pkg="kinematics_py" type="inv_kinematics.py" />
+</launch>
