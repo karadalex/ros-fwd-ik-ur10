@@ -66,3 +66,7 @@ virtualenv -p /usr/bin/python3.6 venv
 source venv/bin/activate
 pip install -r requirements.txt
 ```
+
+## Notices
+
+1. UR10 models are from [universal_robot](https://github.com/ros-industrial/universal_robot)
