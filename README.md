@@ -3,7 +3,8 @@ Forward & Inverse Kinematics, Trajectories, Visualizations in ROS
 
 ## Introduction
 
-This is a project for the Robotics course at University if Patras (Spring Semester 2019)
+This is a project for the Robotics course at University if Patras (Spring Semester 2019).
+ROS Forward, Inverse Kinematics, Trajectory planning, PtP-T, UR10 Robot
 
 ## Requirements
 
