@@ -11,6 +11,7 @@ services:
       - roscore
 
   fwd_kinematics:
+    image: kinematics
     build: ./kinematics_py
     container_name: fwd_kinematics
     depends_on:
@@ -23,7 +24,7 @@ services:
     command: /bin/bash -c "source /ros_ws/devel/setup.bash && rosrun kinematics_py fwd_kinematics.py"
 
   inv_kinematics:
-    build: ./kinematics_py
+    image: kinematics
     container_name: inv_kinematics
     depends_on:
       - master
@@ -33,6 +34,20 @@ services:
     volumes:
       - roslogs:/root/.ros/log/
     command: /bin/bash -c "source /ros_ws/devel/setup.bash && rosrun kinematics_py inv_kinematics.py"
+
+  webgui:
+    build: ./webgui
+    container_name: webgui
+    depends_on:
+      - master
+    environment:
+      - "ROS_HOSTNAME=webgui"
+      - "ROS_MASTER_URI=http://master:11311"
+    volumes:
+      - roslogs:/root/.ros/log/
+    ports:
+      - "5000:5000"
+    command: /bin/bash -c "source /ros_ws/devel/setup.bash && rosrun webgui app.py"
 
   gazebo:
     build: ./gazebo

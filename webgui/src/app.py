@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 from flask import Flask, request, render_template
 import rospy
 import json
@@ -5,7 +6,6 @@ from math import pi
 
 
 app = Flask(__name__)
-rospy.init_node('webserver')
 
 
 @app.route('/', methods=['POST', 'GET'])
@@ -25,3 +25,7 @@ def home():
 
     return render_template('index.html', theta=theta, L=L, d=d, a=a)
 
+
+if __name__ == '__main__':
+    rospy.init_node('webserver')
+    app.run(debug=True, host='0.0.0.0')
