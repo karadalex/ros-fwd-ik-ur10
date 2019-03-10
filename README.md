@@ -68,6 +68,15 @@ source venv/bin/activate
 pip install -r requirements.txt
 ```
 
+## JetBrains PyCharm
+
+To configure PyCharm IDE to detect and use **rospy** library
+1. In your catkin_workspace run `source devel/setup.bash`
+2. After the ROS environment is enabled, start PyCharm from the same terminal `charm .`
+3. It is recommended that you configure PyCharm to use a separate python environment
+
+## Troubleshooting
+
 ## Notices
 
 1. UR10 models are from [universal_robot](https://github.com/ros-industrial/universal_robot)
