@@ -1,6 +1,7 @@
 from flask import Flask, request, render_template
 import rospy
 import json
+from math import pi
 
 
 app = Flask(__name__)
@@ -14,10 +15,10 @@ def home():
     d = []
     a = []
     if request.method == 'POST':
-        theta = request.form['theta'].split(',')
-        L = request.form['L'].split(',')
-        d = request.form['d'].split(',')
-        a = request.form['a'].split(',')
+        theta = [float(eval(x)) for x in request.form['theta'].split(',') if x != ""]
+        L = [float(eval(x)) for x in request.form['L'].split(',') if x != ""]
+        d = [float(eval(x)) for x in request.form['d'].split(',') if x != ""]
+        a = [float(eval(x)) for x in request.form['a'].split(',') if x != ""]
         dh = {"theta": theta, "L": L, "d": d, "a": a}
         rospy.loginfo("DH parameters: " + json.dumps(dh))
         rospy.set_param("dh_params", dh)
