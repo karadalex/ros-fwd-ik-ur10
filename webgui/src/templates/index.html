@@ -13,65 +13,107 @@
         <div class="row">
             <h2> Forward Kinematics </h2>
         </div>
+
         <div class="row">
-            <p> DH Parameters </p>
+            <h4> DH Parameters </h4><br>
         </div>
         <div class="row">
-            <div class="col-sm">
-                <form action="/" method="POST">
-        <div class="form-group row">
-            <label for="theta" class="col-sm-2 col-form-label">theta</label>
-            <div class="col-sm-10">
-                <input type="text" class="form-control" id="theta" name="theta" value="{{ request.form['theta'] }}">
-            </div>
-        </div>
-        <div class="form-group row">
-            <label for="L" class="col-sm-2 col-form-label">L</label>
-            <div class="col-sm-10">
-                <input type="text" class="form-control" id="L" name="L" value="{{ request.form['L'] }}">
-            </div>
-        </div>
-        <div class="form-group row">
-            <label for="d" class="col-sm-2 col-form-label">d</label>
-            <div class="col-sm-10">
-                <input type="text" class="form-control" id="d" name="d" value="{{ request.form['d'] }}">
-            </div>
-        </div>
-        <div class="form-group row">
-            <label for="a" class="col-sm-2 col-form-label">a</label>
-            <div class="col-sm-10">
-                <input type="text" class="form-control" id="a" name="a" value="{{ request.form['a'] }}">
-            </div>
-        </div>
-        <button type="submit" class="btn btn-primary">Set parameters</button>
-    </form>
-            </div>
-            <div class="col-sm">
-                <table class="table">
-        <thead>
-            <tr>
-                <th scope="col">i</th>
-                <th scope="col">theta[i]</th>
-                <th scope="col">L[i-1]</th>
-                <th scope="col">d[i]</th>
-                <th scope="col">a[i-1]</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for i in range(theta|length) %}
-            <tr>
-                <th scope="row"> {{ i + 1 }} </th>
-                <td> {{ theta[i] }} </td>
-                <td> {{ L[i] }} </td>
-                <td> {{ d[i] }} </td>
-                <td> {{ a[i] }} </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-            </div>
+            <ul>
+                <li>All input lists below must have same number of elements</li>
+                <li>If one parameter is variable, set it as zero and then select it from the table on the right</li>
+            </ul>
         </div>
 
+        <form action="/" method="POST">
+            <div class="row">
+                <div class="col-sm">
+                    <div class="form-group row">
+                        <label for="theta" class="col-sm-2 col-form-label">theta</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="theta" name="theta" value="{{ request.form['theta'] }}">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="L" class="col-sm-2 col-form-label">L</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="L" name="L" value="{{ request.form['L'] }}">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="d" class="col-sm-2 col-form-label">d</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="d" name="d" value="{{ request.form['d'] }}">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="a" class="col-sm-2 col-form-label">a</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="a" name="a" value="{{ request.form['a'] }}">
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Set parameters</button>
+                </div>
+
+                <div class="col-sm">
+                    <p>Check all joint variables</p>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">i</th>
+                                <th scope="col">theta[i]</th>
+                                <th scope="col">L[i-1]</th>
+                                <th scope="col">d[i]</th>
+                                <th scope="col">a[i-1]</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for i in range(theta|length) %}
+                            <tr>
+                                <th scope="row"> {{ i + 1 }} </th>
+                                <td>
+                                    <div class="form-check form-check-inline">
+                                        <label class="form-check-label" for="theta-{{i+1}}">{{ theta[i] }}</label>
+                                        <input class="form-check-input" type="checkbox" name="joint-variables" id="theta-{{i+1}}" value="theta-{{i+1}}" />
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="form-check form-check-inline">
+                                        <label class="form-check-label" for="L-{{i}}">{{ L[i] }}</label>
+                                        <input class="form-check-input" type="checkbox" name="joint-variables" id="L-{{i}}" value="L-{{i}}" />
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="form-check form-check-inline">
+                                        <label class="form-check-label" for="d-{{i+1}}">{{ d[i] }}</label>
+                                        <input class="form-check-input" type="checkbox" name="joint-variables" id="d-{{i+1}}" value="d-{{i+1}}" />
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="form-check form-check-inline">
+                                        <label class="form-check-label" for="a-{{i}}">{{ a[i] }}</label>
+                                        <input class="form-check-input" type="checkbox" name="joint-variables" id="a-{{i}}" value="a-{{i}}" />
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    <button type="submit" class="btn btn-primary">Set joint variables</button>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm">
+                    <p>Joint variables</p>
+                    {% for joint in joint_vars %}
+                    <div class="form-group">
+                        <label for="{{ joint }}"> {{ joint }} </label>
+                        <input type="range" class="form-control-range" id="{{ joint }}">
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </form>
         <div class="row">
             <h2> Inverse Kinematics </h2>
         </div>

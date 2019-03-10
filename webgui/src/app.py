@@ -6,15 +6,19 @@ from math import pi
 
 
 app = Flask(__name__)
+theta = []
+L = []
+d = []
+a = []
+joint_vars = []
 
 
 @app.route('/', methods=['POST', 'GET'])
 def home():
-    theta = []
-    L = []
-    d = []
-    a = []
-    if request.method == 'POST':
+    global theta, L, d, a, joint_vars
+
+    # Handle input from set-parameters-form
+    if request.method == 'POST' and "theta" in request.form:
         theta = [float(eval(x)) for x in request.form['theta'].split(',') if x != ""]
         L = [float(eval(x)) for x in request.form['L'].split(',') if x != ""]
         d = [float(eval(x)) for x in request.form['d'].split(',') if x != ""]
@@ -23,7 +27,13 @@ def home():
         rospy.loginfo("DH parameters: " + json.dumps(dh))
         rospy.set_param("dh_params", dh)
 
-    return render_template('index.html', theta=theta, L=L, d=d, a=a)
+    # Handle input from check-joint-variables-table-form
+    if request.method == 'POST' and "joint-variables" in request.form:
+        joint_vars = request.form.getlist('joint-variables')
+        rospy.loginfo("Joint variable names: " + json.dumps(joint_vars))
+        print(joint_vars)
+
+    return render_template('index.html', theta=theta, L=L, d=d, a=a, joint_vars=joint_vars)
 
 
 if __name__ == '__main__':
