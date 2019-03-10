@@ -2,6 +2,7 @@
 import numpy.matlib
 import numpy as np
 from math import pi, sin, cos
+import rospy
 
 
 # Takes DH parameters and joint variables as input
@@ -28,10 +29,11 @@ def forward(theta, L, d, a):
 
 
 if __name__ == "__main__":
-    # DH Parameters for UR10 Robot
-    L = [0, -0.612, -0.5723, 0, 0, 0]
-    d = [0.1273, 0, 0, 0.163941, 0.1157, 0.0922]
-    a = [pi/2, 0, 0, pi/2, -pi/2, 0]
+    # Get DH Parameters from ROS Parameter server or use defaults
+    # if parameters don't exist in parameter server
+    L = rospy.get_param('/dh_params/L', [0, -0.612, -0.5723, 0, 0, 0])
+    d = rospy.get_param('/dh_params/d', [0.1273, 0, 0, 0.163941, 0.1157, 0.0922])
+    a = rospy.get_param('/dh_params/a', [pi/2, 0, 0, pi/2, -pi/2, 0])
 
     # Joint angles variables
     # theta = np.zeros(6)

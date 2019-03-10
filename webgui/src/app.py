@@ -13,6 +13,11 @@ a = [pi/2, 0, 0, pi/2, -pi/2, 0]
 theta = [0, 0, 0, 0, 0, 0]
 joint_vars = ["theta-"+str(i+1) for i in range(len(theta))]
 
+# Save default parameters in ROS Parameter server
+dh = {"theta": theta, "L": L, "d": d, "a": a}
+rospy.loginfo("Loaded default DH parameters for UR10: " + json.dumps(dh))
+rospy.set_param("dh_params", dh)
+
 
 @app.route('/', methods=['POST', 'GET'])
 def home():
@@ -20,6 +25,7 @@ def home():
 
     # Handle input from set-parameters-form
     if request.method == 'POST' and "theta" in request.form:
+        # Update dh params and save them in ROS Parameter server
         theta = [float(eval(x)) for x in request.form['theta'].split(',') if x != ""]
         L = [float(eval(x)) for x in request.form['L'].split(',') if x != ""]
         d = [float(eval(x)) for x in request.form['d'].split(',') if x != ""]
