@@ -3,35 +3,78 @@
 <head>
     <meta charset="UTF-8">
     <title>ROS Web Dashboard</title>
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+    <script src="/static/js/bootstrap.min.js"></script>
 </head>
 <body>
     <h1>ROS Web Dashboard</h1>
-    <form action="/" method="POST">
-        <h3>DH Parameters</h3>
-        <p> theta <input type="text" name="theta"> </p>
-        <p> L <input type="text" name="L"> </p>
-        <p> d <input type="text" name="d"> </p>
-        <p> a <input type="text" name="a"> </p>
-        <p><input type="submit" value="submit"></p>
-    </form>
 
-    <table>
-        <tr>
-            <th>i</th>
-            <th>theta[i]</th>
-            <th>L[i-1]</th>
-            <th>d[i]</th>
-            <th>a[i-1]</th>
-        </tr>
-        {% for i in range(theta|length) %}
-        <tr>
-            <td> {{ i + 1 }} </td>
-            <td> {{ theta[i] }} </td>
-            <td> {{ L[i] }} </td>
-            <td> {{ d[i] }} </td>
-            <td> {{ a[i] }} </td>
-        </tr>
-        {% endfor %}
+    <div class="container">
+        <div class="row">
+            <h2> Forward Kinematics </h2>
+        </div>
+        <div class="row">
+            <p> DH Parameters </p>
+        </div>
+        <div class="row">
+            <div class="col-sm">
+                <form action="/" method="POST">
+        <div class="form-group row">
+            <label for="theta" class="col-sm-2 col-form-label">theta</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" id="theta" name="theta">
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="L" class="col-sm-2 col-form-label">L</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" id="L" name="L">
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="d" class="col-sm-2 col-form-label">d</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" id="d" name="d">
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="a" class="col-sm-2 col-form-label">a</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" id="a" name="a">
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+            </div>
+            <div class="col-sm">
+                <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">i</th>
+                <th scope="col">theta[i]</th>
+                <th scope="col">L[i-1]</th>
+                <th scope="col">d[i]</th>
+                <th scope="col">a[i-1]</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for i in range(theta|length) %}
+            <tr>
+                <th scope="row"> {{ i + 1 }} </th>
+                <td> {{ theta[i] }} </td>
+                <td> {{ L[i] }} </td>
+                <td> {{ d[i] }} </td>
+                <td> {{ a[i] }} </td>
+            </tr>
+            {% endfor %}
+        </tbody>
     </table>
+            </div>
+        </div>
+
+        <div class="row">
+            <h2> Inverse Kinematics </h2>
+        </div>
+    </div>
 </body>
 </html>
