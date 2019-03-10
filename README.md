@@ -59,6 +59,13 @@ sudo apt-get install ros-melodic-tf2-sensor-msgs
 sudo apt-get install -y ros-melodic-moveit
 ```
 
+## User guide
+
+Get DH Parameters from ROS Parameter server
+```
+rosparam get dh_params
+```
+
 ## Python Virtual environments
 
 ```

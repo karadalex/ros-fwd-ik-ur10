@@ -18,7 +18,9 @@ def home():
         L = request.form['L'].split(',')
         d = request.form['d'].split(',')
         a = request.form['a'].split(',')
-        rospy.loginfo("DH parameters: " + json.dumps({"theta": theta, "L": L, "d": d, "a": a}))
+        dh = {"theta": theta, "L": L, "d": d, "a": a}
+        rospy.loginfo("DH parameters: " + json.dumps(dh))
+        rospy.set_param("dh_params", dh)
 
     return render_template('index.html', theta=theta, L=L, d=d, a=a)
 
