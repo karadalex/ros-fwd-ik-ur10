@@ -52,11 +52,21 @@ services:
   gazebo:
     build: ./gazebo
     container_name: gazebo
+    depends_on:
+      - master
+    environment:
+      - "ROS_HOSTNAME=gazebo"
+      - "ROS_MASTER_URI=http://master:11311"
     volumes:
       - gazebo:/root/.gazebo
+      - ./ur_gazebo/:/ros_ws/src/ur_gazebo
+      - ./ur_description/:/ros_ws/src/ur_description
+      - ./ur10_moveit_config/:/ros_ws/src/ur10_moveit_config
     ports:
       - "8080:8080"
       - "7681:7681"
+      - "11345:11345"
+    command: /bin/bash -c "source /ros_ws/devel/setup.bash && roslaunch ur_gazebo ur10.launch"
 
 
 volumes:
