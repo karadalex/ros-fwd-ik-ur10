@@ -6,11 +6,12 @@ from math import pi
 
 
 app = Flask(__name__)
-theta = []
-L = []
-d = []
-a = []
-joint_vars = []
+# Set default DH Parameters to those of UR10 Robot
+L = [0, -0.612, -0.5723, 0, 0, 0]
+d = [0.1273, 0, 0, 0.163941, 0.1157, 0.0922]
+a = [pi/2, 0, 0, pi/2, -pi/2, 0]
+theta = [0, 0, 0, 0, 0, 0]
+joint_vars = ["theta-"+str(i+1) for i in range(len(theta))]
 
 
 @app.route('/', methods=['POST', 'GET'])

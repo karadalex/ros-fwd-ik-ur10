@@ -21,6 +21,7 @@
             <ul>
                 <li>All input lists below must have same number of elements</li>
                 <li>If one parameter is variable, set it as zero and then select it from the table on the right</li>
+                <li>Default values below are for the UR10 robot</li>
             </ul>
         </div>
 
@@ -30,25 +31,25 @@
                     <div class="form-group row">
                         <label for="theta" class="col-sm-2 col-form-label">theta</label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control" id="theta" name="theta" value="{{ request.form['theta'] }}">
+                            <input type="text" class="form-control" id="theta" name="theta" value="{{ theta|join(',') }}">
                         </div>
                     </div>
                     <div class="form-group row">
                         <label for="L" class="col-sm-2 col-form-label">L</label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control" id="L" name="L" value="{{ request.form['L'] }}">
+                            <input type="text" class="form-control" id="L" name="L" value="{{ L|join(',') }}">
                         </div>
                     </div>
                     <div class="form-group row">
                         <label for="d" class="col-sm-2 col-form-label">d</label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control" id="d" name="d" value="{{ request.form['d'] }}">
+                            <input type="text" class="form-control" id="d" name="d" value="{{ d|join(',') }}">
                         </div>
                     </div>
                     <div class="form-group row">
                         <label for="a" class="col-sm-2 col-form-label">a</label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control" id="a" name="a" value="{{ request.form['a'] }}">
+                            <input type="text" class="form-control" id="a" name="a" value="{{ a|join(',') }}">
                         </div>
                     </div>
                     <button type="submit" class="btn btn-primary">Set parameters</button>
