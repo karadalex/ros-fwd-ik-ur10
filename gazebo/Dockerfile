@@ -62,8 +62,14 @@ RUN apt-get update && apt-get install -y \
     ros-kinetic-ros-core=1.3.2-0* \
     ros-kinetic-gazebo-ros-pkgs \ 
     ros-kinetic-gazebo-ros-control \
-    ros-kinetic-xacro \
-    && rm -rf /var/lib/apt/lists/*
+    ros-kinetic-xacro
+RUN apt-get install -y ros-kinetic-joint-trajectory-controller \
+	ros-kinetic-robot-state-publisher \
+	ros-kinetic-joint-state-controller \
+	ros-kinetic-ur-description \
+	ros-kinetic-effort-controllers
+
+RUN rm -rf /var/lib/apt/lists/*
 
 # setup environment
 EXPOSE 8080
