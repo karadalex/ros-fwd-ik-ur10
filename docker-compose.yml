@@ -62,6 +62,7 @@ services:
       - ./ur_gazebo/:/ros_ws/src/ur_gazebo
       - ./ur_description/:/ros_ws/src/ur_description
       - ./ur10_moveit_config/:/ros_ws/src/ur10_moveit_config
+      - ./world_description/:/ros_ws/src/world_description
     ports:
       - "8080:8080"
       - "7681:7681"
