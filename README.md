@@ -61,9 +61,27 @@ sudo apt-get install -y ros-melodic-moveit
 
 ## User guide
 
+To use the ROS docker containers with your local ROS environment run
+```
+export ROS_MASTER_URI=http://localhost:11311
+```
+and similarly to connect to the gazebo server and access the simulation locally run
+```
+export GAZEBO_MASTER_URI=localhost:11345
+gzclient
+```
+The Gazebo instance running in the Docker container and your local Gazebo instance as well as
+the ROS environments, must be of matching versions.
+
 Get DH Parameters from ROS Parameter server
 ```
 rosparam get dh_params
+```
+Connect to one of the ROS containers and run a simple movement for the UR10 robot
+```
+docker exec -it <CONTAINER_ID> bash
+source /ros_ws/devel/setup.bash
+rostopic pub /arm_controller/command trajectory_msgs/JointTrajectory '{joint_names: ["shoulder_pan_joint", "shoulder_lift_joint", "elbow_joint", "wrist_1_joint", "wrist_2_joint", "wrist_3_joint"], points: [{positions: [-3.14, -0.5, 0.7, 0.5, 0.0, 0.0], time_from_start: [1.0, 0.0]}]}'
 ```
 
 ## Python Virtual environments
