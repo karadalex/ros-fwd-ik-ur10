@@ -1,14 +1,16 @@
 {% extends 'layout.html' %}
 
 
+{% block title %} ROS - Simulation {% endblock %}
+
 {% block body %}
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
     <h1 class="h2">Simulation</h1>
 </div>
 <div class="container">
     <div class="row">
-        <div class="embed-responsive">
-            <iframe class="embed-responsive-item" src="https://getbootstrap.com/"></iframe>
+        <div class="embed-responsive simulation-iframe">
+            <iframe class="embed-responsive-item" src="http://192.168.1.3:8080/"></iframe>
         </div>
     </div>
 </div>
