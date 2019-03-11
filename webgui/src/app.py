@@ -21,7 +21,7 @@ rospy.set_param("dh_params", dh)
 
 @app.route('/', methods=['POST', 'GET'])
 def home():
-    return render_template('index.html', theta=theta, L=L, d=d, a=a, joint_vars=joint_vars)
+    return render_template('index.html')
 
 
 @app.route('/kinematics', methods=['POST', 'GET'])
@@ -50,7 +50,17 @@ def kinematics():
 
 @app.route('/simulation', methods=['POST', 'GET'])
 def simulation():
-    return render_template('simulation.html', theta=theta, L=L, d=d, a=a, joint_vars=joint_vars)
+    return render_template('simulation.html')
+
+
+@app.route('/motion-planning', methods=['POST', 'GET'])
+def motion_plan():
+    return render_template('motion-plan.html')
+
+
+@app.route('/logging', methods=['POST', 'GET'])
+def logging():
+    return render_template('logging.html')
 
 
 if __name__ == '__main__':
