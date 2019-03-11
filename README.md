@@ -83,6 +83,7 @@ docker exec -it <CONTAINER_ID> bash
 source /ros_ws/devel/setup.bash
 rostopic pub /arm_controller/command trajectory_msgs/JointTrajectory '{joint_names: ["shoulder_pan_joint", "shoulder_lift_joint", "elbow_joint", "wrist_1_joint", "wrist_2_joint", "wrist_3_joint"], points: [{positions: [-3.14, -0.5, 0.7, 0.5, 0.0, 0.0], time_from_start: [1.0, 0.0]}]}'
 ```
+<p align="center"><img src="./docs/gazebo-screenshot.png"/></p>
 
 ## Python Virtual environments
 
