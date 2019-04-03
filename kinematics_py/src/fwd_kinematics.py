@@ -3,7 +3,7 @@ import numpy.matlib
 import numpy as np
 from math import pi, sin, cos
 import rospy
-
+from trajectory_msgs.msg import JointTrajectory
 
 # Takes DH parameters and joint variables as input
 # and returns transformation matrix of forward kinematics
@@ -28,7 +28,17 @@ def forward(theta, L, d, a):
     return M
 
 
+def handleJointValues(msg):
+    return msg
+
+
 if __name__ == "__main__":
+    # Initialize ROS node
+    rospy.init_node('fwd_kinematics')
+
+    # Subscribe to arm_controller topic to get JointTrajectory values
+    sub = rospy.Subscriber('/arm_controller/command', JointTrajectory, handleJointValues)
+
     # Get DH Parameters from ROS Parameter server or use defaults
     # if parameters don't exist in parameter server
     L = rospy.get_param('/dh_params/L', [0, -0.612, -0.5723, 0, 0, 0])
@@ -50,3 +60,5 @@ if __name__ == "__main__":
     print(M)
     print(p6)
     print(p0)
+
+    rospy.spin()
