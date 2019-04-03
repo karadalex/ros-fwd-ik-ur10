@@ -103,6 +103,12 @@ To configure PyCharm IDE to detect and use **rospy** library
 
 ## Troubleshooting
 
+1. If the robot doesn't show correctly in Rviz (i.e. all links have position 0,0,0), make sure locale is setup correctly by running:
+```
+export LC_NUMERIC="en_US.UTF-8"
+```
+This is because depending on locale, parsing floats in URDF can yield wrong values
+
 ## Notices
 
 1. UR10 models are from [universal_robot](https://github.com/ros-industrial/universal_robot)
