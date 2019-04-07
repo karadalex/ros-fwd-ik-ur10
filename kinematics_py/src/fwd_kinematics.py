@@ -28,7 +28,7 @@ def forward(theta, L, d, a):
     for i in range(6):
         M = M * M_joints[i]
 
-    return M
+    return M, M_joints
 
 
 def handleJointValues(msg):
@@ -51,7 +51,7 @@ if __name__ == "__main__":
     # Joint angles variables
     theta = symbols('th1:7')
 
-    M = forward(theta, L, d, a)
+    M, _ = forward(theta, L, d, a)
     pprint(M)
     # Test angles
     angles = [pi/4, pi/4, pi/2, pi/2, pi/4, 0]
