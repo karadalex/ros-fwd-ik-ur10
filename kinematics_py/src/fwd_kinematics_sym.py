@@ -22,7 +22,8 @@ def forward(theta, L, d, a):
     # with respect to Universal coordinate system {0}
     M = eye(4)
     for i in range(6):
-        M = M * M_joints[i]
+        # Simplify transformation matrices and multiply
+        M = M.applyfunc(trigsimp) * M_joints[i].applyfunc(trigsimp)
 
     return M, M_joints
 
