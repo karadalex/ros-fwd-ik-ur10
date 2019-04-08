@@ -42,12 +42,12 @@ if __name__ == "__main__":
     angles = [pi/4, pi/4, pi/2, pi/2, pi/4, 0]
     M_test = M.subs({ 'th'+str(i+1):angles[i] for i in range(6) })
     pprint(M_test)
-    print(latex(M_test))
-    print(latex(M))
+    # print(latex(M_test))
+    # print(latex(M))
 
     # Position vector in homogeneous coordinates with respect to coordinate system {6}
     p6 = [0, 0, 0, 1]
     # Position vector in homogeneous coordinates with respect to universal coordinate system {0}
     p0 = np.matmul(np.array(M_test).astype(np.float64), p6)
     print(p0)
-    print(latex(p0))
+    # print(latex(p0))
