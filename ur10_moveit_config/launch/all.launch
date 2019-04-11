@@ -1,0 +1,17 @@
+<!-- Hand-made -->
+<launch>
+  <include file="$(find ur_gazebo)/launch/ur10.launch">
+    <arg name="limited" value="True"/>
+    <arg name="gui" value="True" />
+  </include>
+
+  <include file="$(find ur10_moveit_config)/launch/ur10_moveit_planning_execution.launch">
+    <arg name="sim" value="True"/>
+    <arg name="limited" value="True"/>
+  </include>
+
+  <include file="$(find ur10_moveit_config)/launch/moveit_rviz.launch">
+    <arg name="config" value="True"/>
+  </include>
+</launch>
+
