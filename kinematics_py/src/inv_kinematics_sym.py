@@ -3,7 +3,7 @@ import numpy.matlib
 import numpy as np
 from math import pi, sin, cos
 from sympy import *
-from fwd_kinematics import forward
+from fwd_kinematics_sym import forward
 
 
 # M must be 4x4
@@ -25,50 +25,53 @@ def inverseKin(M0_6, M_joints):
     unknown = set(th)
     solved = set()
 
-    for epoch in range(1):
-        lhs = Matrix([
-            [ix, jx, kx, px],
-            [iy, jy, ky, py],
-            [iz, jz, kz, pz],
-            [0, 0, 0, 1]    
-        ])
-        rhs = M0_6
+    lhs = Matrix([
+        [ix, jx, kx, px],
+        [iy, jy, ky, py],
+        [iz, jz, kz, pz],
+        [0, 0, 0, 1]    
+    ])
 
-        for i in range(5):
-            lhs = invTransformation(M_joints[i]) * lhs
-            rhs = invTransformation(M_joints[i]) * rhs
-            # rhs = eye(4)
-            # for j in range(i+1,6):
-            #     rhs = rhs * M_joints[j]
-            equations = lhs - rhs
+    # Solve for th1
+    lhs = invTransformation(M_joints[0]) * lhs * invTransformation(M_joints[5])
+    rhs = eye(4)
+    for i in range(1,5):
+        rhs = rhs * M_joints[i]
+    equations = lhs - rhs
+    for j in range(3):
+        for k in range(4):
+            eq = trigsimp(equations[j,k])
+            eq = equations[j,k]
+            variables = eq.free_symbols
+            variables = variables.difference(known)
+            variables = variables.difference(solved)
+            print(variables)
+            print("\n")
+            if len(variables) == 1:
+                varToBeSolved = variables.pop()
+                print("Solving for "+str(varToBeSolved)+", equation:")
+                pprint(eq)
+                solutions = solve(eq, varToBeSolved)
+                for sol in solutions:
+                    print(sol)
+                    solutionSet[varToBeSolved].append(sol)
+                
+                solved.add(varToBeSolved)
+                # break double loop
+                j,k = 2, 3
 
-            for j in range(3):
-                for k in range(4):
-                    eq = trigsimp(equations[j,k])
-                    variables = eq.free_symbols
-                    variables = variables.difference(known)
-                    variables = variables.difference(solved)
-                    print(eq)
-                    print(variables)
-                    print("\n")
-                    if len(variables) == 1:
-                        varToBeSolved = variables.pop()
+    # eqIndex = 1
+    # for i in range(5):
+    #     lhs = invTransformation(M_joints[i]) * lhs
+    #     # rhs = invTransformation(M_joints[i]) * rhs
+    #     rhs = eye(4)
+    #     for j in range(i+1,6):
+    #         rhs = rhs * M_joints[j]
+    #     equations = lhs - rhs
 
-                        print("Solving for "+str(varToBeSolved)+", equation:")
-                        pprint(eq)
-                        
-                        # if (varToBeSolved == th[0] or varToBeSolved == th[1] or varToBeSolved == th[2]) and epoch < 3 : 
-                        #     # Solving for ... takes too long!
-                        #     solutionSet[varToBeSolved].append(eq)
-                        # else:
-                        solutions = solve(eq, varToBeSolved)
-                        for sol in solutions:
-                            print(sol)
-                            solutionSet[varToBeSolved].append(sol)
-                        
-                        solved.add(varToBeSolved)
-        
-        print("\n")
+    
+    
+    print("\n")
 
     return solutionSet
 
@@ -95,19 +98,23 @@ if __name__ == "__main__":
     px,py,pz = M_test[0,3], M_test[1,3], M_test[2,3]
     knownsDict = {'ix':ix,'iy':iy,'iz':iz,'jx':jx,'jy':jy,'jz':jz,'kx':kx,'ky':ky,'kz':kz,'px':px,'py':py, 'pz':pz}
     
-    # th5
-    print("Solutions for th5")
-    th5_1 = ikSolutions[Symbol('th5')][0].subs(knownsDict).evalf()
-    th5_2 = ikSolutions[Symbol('th5')][1].subs(knownsDict).evalf()
-    print(th5_1, th5_2)
-
     # th1
     print("Solutions for th1")
-    th1_1 = ikSolutions[Symbol('th1')][0].subs(knownsDict).subs({'th5':th5_1}).evalf()
-    # th1_2 = ikSolutions[Symbol('th1')][0].subs(knownsDict).subs({'th5':th5_2}).evalf()
-    # th1_3 = ikSolutions[Symbol('th1')][1].subs(knownsDict).subs({'th5':th5_1}).evalf()
-    # th1_4 = ikSolutions[Symbol('th1')][1].subs(knownsDict).subs({'th5':th5_2}).evalf()
+    th1_1 = ikSolutions[Symbol('th1')][0].subs(knownsDict).evalf()
+    th1_2 = ikSolutions[Symbol('th1')][1].subs(knownsDict).evalf()
     print(th1_1)
+    print(th1_2)
+
+    # th5
+    print("Solutions for th5")
+    th5_1 = ikSolutions[Symbol('th5')][0].subs(knownsDict).subs({'th1':th1_1}).evalf()
+    th5_2 = ikSolutions[Symbol('th5')][0].subs(knownsDict).subs({'th1':th1_2}).evalf()
+    th5_3 = ikSolutions[Symbol('th5')][1].subs(knownsDict).subs({'th1':th1_1}).evalf()
+    th5_4 = ikSolutions[Symbol('th5')][1].subs(knownsDict).subs({'th1':th1_2}).evalf()
+    print(th5_1)
+    print(th5_2)
+    print(th5_3)
+    print(th5_4)
 
     # th4
     print("Solutions for th4")
