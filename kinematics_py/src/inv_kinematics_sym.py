@@ -25,7 +25,7 @@ def inverseKin(M0_6, M_joints):
     unknown = set(th)
     solved = set()
 
-    lhs = Matrix([
+    targetTransf = Matrix([
         [ix, jx, kx, px],
         [iy, jy, ky, py],
         [iz, jz, kz, pz],
@@ -33,7 +33,7 @@ def inverseKin(M0_6, M_joints):
     ])
 
     # Solve for th1
-    lhs = invTransformation(M_joints[0]) * lhs * invTransformation(M_joints[5])
+    lhs = invTransformation(M_joints[0]) * targetTransf * invTransformation(M_joints[5])
     rhs = eye(4)
     for i in range(1,5):
         rhs = rhs * M_joints[i]
@@ -45,6 +45,7 @@ def inverseKin(M0_6, M_joints):
             variables = eq.free_symbols
             variables = variables.difference(known)
             variables = variables.difference(solved)
+            pprint(eq)
             print(variables)
             print("\n")
             if len(variables) == 1:
@@ -59,15 +60,36 @@ def inverseKin(M0_6, M_joints):
                 solved.add(varToBeSolved)
                 # break double loop
                 j,k = 2, 3
-
-    # eqIndex = 1
-    # for i in range(5):
-    #     lhs = invTransformation(M_joints[i]) * lhs
-    #     # rhs = invTransformation(M_joints[i]) * rhs
-    #     rhs = eye(4)
-    #     for j in range(i+1,6):
-    #         rhs = rhs * M_joints[j]
-    #     equations = lhs - rhs
+    
+    # Solve for th5 and then th6
+    lhs = invTransformation(M_joints[0]) * targetTransf
+    rhs = eye(4)
+    for i in range(1,6):
+        rhs = rhs * M_joints[i]
+    equations = lhs - rhs
+    for epoch in range(2):
+        for j in range(3):
+            for k in range(4):
+                eq = trigsimp(equations[j,k])
+                eq = equations[j,k]
+                variables = eq.free_symbols
+                variables = variables.difference(known)
+                variables = variables.difference(solved)
+                pprint(eq)
+                print(variables)
+                print("\n")
+                if len(variables) == 1:
+                    varToBeSolved = variables.pop()
+                    print("Solving for "+str(varToBeSolved)+", equation:")
+                    pprint(eq)
+                    solutions = solve(eq, varToBeSolved)
+                    for sol in solutions:
+                        print(sol)
+                        solutionSet[varToBeSolved].append(sol)
+                    
+                    solved.add(varToBeSolved)
+                    # break double loop
+                    j,k = 2, 3
 
     
     
@@ -79,7 +101,7 @@ if __name__ == "__main__":
     
     # Compute forward kinematics
     L = [0, 0.612, 0.572, 0, 0, 0]
-    d = [0.128, 0, 0, 0.164, 0.116, 0.092]
+    d = [0, 0, 0, 0.164, 0.116, 0.092]
     a = [0, -pi/2, 0, 0, pi/2, -pi/2]
     theta = symbols('th1:7')
     M0_6, M_joints = forward(theta, L, d, a)
