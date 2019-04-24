@@ -40,8 +40,7 @@ def inverseKin(M0_6, M_joints):
     equations = lhs - rhs
     for j in range(3):
         for k in range(4):
-            eq = trigsimp(equations[j,k])
-            eq = equations[j,k]
+            eq = equations[j,k].rewrite(tan)
             variables = eq.free_symbols
             variables = variables.difference(known)
             variables = variables.difference(solved)
@@ -70,8 +69,7 @@ def inverseKin(M0_6, M_joints):
     for epoch in range(2):
         for j in range(3):
             for k in range(4):
-                eq = trigsimp(equations[j,k])
-                eq = equations[j,k]
+                eq = equations[j,k].rewrite(tan)
                 variables = eq.free_symbols
                 variables = variables.difference(known)
                 variables = variables.difference(solved)
