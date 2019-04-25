@@ -58,7 +58,7 @@ def inverseKin(M0_6, M_joints):
                 
                 solved.add(varToBeSolved)
                 # break double loop
-                j,k = 2, 3
+                j,k = 3, 4
     
     # Solve for th5 and then th6
     lhs = invTransformation(M_joints[0]) * targetTransf
@@ -87,9 +87,9 @@ def inverseKin(M0_6, M_joints):
                     
                     solved.add(varToBeSolved)
                     # break double loop
-                    j,k = 2, 3
+                    j,k = 3, 4
 
-    # Solve for  th2
+    # Solve for th2
     lhs = targetTransf * invTransformation(M_joints[5]) * invTransformation(M_joints[4]) * invTransformation(M_joints[3])
     rhs = eye(4)
     for i in range(0,3):
@@ -101,13 +101,6 @@ def inverseKin(M0_6, M_joints):
             variables = eq.free_symbols
             variables = variables.difference(known)
             variables = variables.difference(solved)
-            # c1,s1,c5,s5,c6,s6 = symbols("c1 s1 c5 s5 c6 s6")
-            # t2,t3,t4 = symbols("t2 t3 t4")
-            # eq = eq.subs({
-            #     cos(th[0]):c1, sin(th[0]):s1,
-            #     cos(th[4]):c5, sin(th[4]):s5,
-            #     cos(th[5]):c6, sin(th[5]):s6
-            # })
             pprint(eq)
             print(variables)
             print("\n")
@@ -122,11 +115,60 @@ def inverseKin(M0_6, M_joints):
                 
                 solved.add(varToBeSolved)
                 # break double loop
-                j,k = 2, 3
+                print(j, k)
+                j,k = 3, 4
 
-    # Solve for th4
-    
-            
+    # Solve for th3, th4
+    lhs = invTransformation(M_joints[0]) * targetTransf * invTransformation(M_joints[5]) * invTransformation(M_joints[4]) * invTransformation(M_joints[3])
+    rhs = eye(4)
+    for i in range(1,3):
+        rhs = rhs * M_joints[i]
+    equations = lhs - rhs
+    for j in range(3):
+        for k in range(4):
+            eq = trigsimp(equations[j,k])
+            variables = eq.free_symbols
+            variables = variables.difference(known)
+            variables = variables.difference(solved)
+            c1,s1,c2,s2,c5,s5,c6,s6 = symbols("c1 s1 c2 s2 c5 s5 c6 s6")
+            t3,t4 = symbols("t3 t4")
+            thTot = {th[2]:t3, th[3]:t4}
+            eq = eq.subs({
+                cos(th[0]):c1, sin(th[0]):s1,
+                cos(th[1]):c2, sin(th[1]):s2,
+                cos(th[4]):c5, sin(th[4]):s5,
+                cos(th[5]):c6, sin(th[5]):s6
+            })
+            eq = simplify(eq)
+            print(j,k)
+            pprint(eq)
+            print(variables)
+            print("\n")
+            if len(variables) == 1:
+                thVar = variables.pop()
+                tVar = thTot[thVar]
+                eq = eq.rewrite(tan).subs({
+                    tan(thVar/2):tVar
+                })
+                print("Solving for "+str(tVar)+", equation:")
+                pprint(eq)
+                solutions = solve(eq, tVar)
+                for sol in solutions:
+                    sol = sol.subs({
+                        c1:cos(th[0]), s1:sin(th[0]),
+                        c2:cos(th[1]), s2:sin(th[1]),
+                        c5:cos(th[4]), s5:sin(th[4]),
+                        c6:cos(th[5]), s6:sin(th[5])
+                    })
+                    # convert back to th
+                    sol = trigsimp(2*atan(sol))
+                    print(sol)
+                    solutionSet[thVar].append(sol)
+                
+                solved.add(thVar)
+                # break double loop
+                print(j, k)
+                j,k = 3, 4
     
     print("\n")
 
@@ -196,9 +238,77 @@ if __name__ == "__main__":
     print(th6_8)
     print("\n")
 
-    # th6
+    # th4
+    print("Solutions for th4")
+    th4_1 = ikSolutions[Symbol('th4')][0].subs(knownsDict).subs({
+        'th1':th1_1, 'th5':th5_1, 'th6':th6_1
+    }).evalf()
+    th4_2 = ikSolutions[Symbol('th4')][0].subs(knownsDict).subs({
+        'th1':th1_1, 'th5':th5_2, 'th6':th6_2
+    }).evalf()
+    th4_3 = ikSolutions[Symbol('th4')][0].subs(knownsDict).subs({
+        'th1':th1_2, 'th5':th5_3, 'th6':th6_3
+    }).evalf()
+    th4_4 = ikSolutions[Symbol('th4')][0].subs(knownsDict).subs({
+        'th1':th1_2, 'th5':th5_4, 'th6':th6_4
+    }).evalf()
+    th4_5 = ikSolutions[Symbol('th4')][0].subs(knownsDict).subs({
+        'th1':th1_1, 'th5':th5_1, 'th6':th6_5
+    }).evalf()
+    th4_6 = ikSolutions[Symbol('th4')][0].subs(knownsDict).subs({
+        'th1':th1_1, 'th5':th5_2, 'th6':th6_6
+    }).evalf()
+    th4_7 = ikSolutions[Symbol('th4')][0].subs(knownsDict).subs({
+        'th1':th1_2, 'th5':th5_3, 'th6':th6_7
+    }).evalf()
+    th4_8 = ikSolutions[Symbol('th4')][0].subs(knownsDict).subs({
+        'th1':th1_2, 'th5':th5_4, 'th6':th6_8
+    }).evalf()
+    print(th4_1)
+    print(th4_2)
+    print(th4_3)
+    print(th4_4)
+    print(th4_5)
+    print(th4_6)
+    print(th4_7)
+    print(th4_8)
+    print("\n")
 
     # th3
+    print("Solutions for th3")
+    th3_1 = ikSolutions[Symbol('th3')][1].subs(knownsDict).subs({
+        'th1':th1_1, 'th5':th5_1, 'th6':th6_1
+    }).evalf()
+    th3_2 = ikSolutions[Symbol('th3')][1].subs(knownsDict).subs({
+        'th1':th1_1, 'th5':th5_2, 'th6':th6_2
+    }).evalf()
+    th3_3 = ikSolutions[Symbol('th3')][1].subs(knownsDict).subs({
+        'th1':th1_2, 'th5':th5_3, 'th6':th6_3
+    }).evalf()
+    th3_4 = ikSolutions[Symbol('th3')][1].subs(knownsDict).subs({
+        'th1':th1_2, 'th5':th5_4, 'th6':th6_4
+    }).evalf()
+    th3_5 = ikSolutions[Symbol('th3')][1].subs(knownsDict).subs({
+        'th1':th1_1, 'th5':th5_1, 'th6':th6_5
+    }).evalf()
+    th3_6 = ikSolutions[Symbol('th3')][1].subs(knownsDict).subs({
+        'th1':th1_1, 'th5':th5_2, 'th6':th6_6
+    }).evalf()
+    th3_7 = ikSolutions[Symbol('th3')][1].subs(knownsDict).subs({
+        'th1':th1_2, 'th5':th5_3, 'th6':th6_7
+    }).evalf()
+    th3_8 = ikSolutions[Symbol('th3')][1].subs(knownsDict).subs({
+        'th1':th1_2, 'th5':th5_4, 'th6':th6_8
+    }).evalf()
+    print(th3_1)
+    print(th3_2)
+    print(th3_3)
+    print(th3_4)
+    print(th3_5)
+    print(th3_6)
+    print(th3_7)
+    print(th3_8)
+    print("\n")
 
     # th2
     print("Solutions for th2")
